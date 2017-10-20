@@ -1,0 +1,262 @@
+/*
+Theme Name: Aeron - Child Theme
+Version: 1.0.0
+Author: ab-themes
+Author URI: http://www.ab-themes.com
+Description: Fully Responsive Multipurpose WordPress Theme
+Theme URI: http://themeforest.net/user/ab-themes/portfolio?ref=ab-themes
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Tags: blue, gray, green, orange, pink, purple, red, white, yellow, light, one-column, two-columns, three-columns, four-columns, left-sidebar, right-sidebar, responsive-layout, custom-colors, custom-menu, full-width-template, theme-options, translation-ready
+Text Domain: aeron
+Template: aeron
+
+/* Theme customization starts here
+-------------------------------------------------------------- */
+
+/* Contact form 7 style */
+
+#two-column{
+	width: 100%;
+}
+#two-column #left{
+	width: 50%;
+	float: left;
+}
+#two-column #right{
+	width: 50%;
+	float: right;
+}
+#two-column p{
+	margin-bottom: 12px;
+}
+#two-column input[type="text"]，
+#two-column input[type="email"]{
+	border:none;
+	border:1px solid #000;
+	font-size :14px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+	
+	padding: 5px;
+}
+input[type="submit"]{
+	background-color: #093d71 !important;
+	font-family: Ubuntu;
+	font-size: 16px !important;
+}
+#two-column #right input[type="text"],
+#two-column #right input[type="email"]
+{
+	width:100%;
+}
+#two-column #left input[type="text"],
+#two-column #left input[type="email"]{
+	width:80%;
+	
+}
+
+@media only screen and (max-width: 550px) {
+	#two-column #right input[type="text"],
+	#two-column #right input[type="email"]
+		{
+		width:100%;
+		}
+	#two-column #left input[type="text"],
+	#two-column #left input[type="email"]{
+		width:80%;
+		}
+		#two-column #left{
+		width: 100%;
+		float: left;
+		}
+	#two-column #right{
+		width: 100%;
+		float: right;
+		}
+}
+
+@media only screen and (max-width: 736px) {
+	#db-partner-section .tcvpb_column_tc_span2{
+		display:none;
+	}
+
+}
+@media only screen and (max-width: 1190px) {
+	.tcvpb_container .tcvpb_column_tc_span3{
+		width: 40%;
+	}
+
+}
+#two-column textarea {
+    position: relative;
+    padding: 5px;
+    border:1px solid #000;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 100%;
+	min-width: 100%;
+	min-height: 100px;
+}
+ input[type="submit"]{
+	width: 100%;
+	height: 56px;
+	background-color: #082b5f;	
+	font-size: 16px;
+}
+#two-column input[type="text"]:focus, 
+#two-column input[type="email"]:focus,
+#two-column textarea:focus{
+	background: #eee;
+}
+input[type="submit"]:hover{
+	background:#fff;
+	color:#222;
+	border: 1px solid #222;
+}
+.wpcf7-response-output {
+	width: 100%;
+}
+.wpcf7-not-valid-tip {
+	width:20%;
+}
+/* END Contact form 7 style */
+
+
+#db-partner-section{
+	margin-bottom: 50px;
+	padding-top: 0px;
+}
+
+#aeron_header {
+	background: rgba(7, 65, 118, 0.7) !important;
+}
+
+
+#main_logo {
+	max-width: 200%;
+}
+
+.db-no-fill {
+	padding-top: 0;
+}
+.db-img-a-center a img{
+	display: inline;
+}
+
+.db_post_thumbnail_container {
+	width: 270px;
+	height: 200px;
+	text-align: center;
+	margin: auto;
+}
+.db_post_thumbnail_container img {
+	width: auto;
+    height: 200px;    
+}
+.db_overlayed_after {
+	background-color: #c3e1e0;
+}
+.db_rp_title {
+	margin-top: 20px;
+	text-align: center;
+	
+}
+.db_rp_title h5 {
+	margin-bottom: 10px;
+}
+.db_rp_date {
+	text-align: center;
+}
+.db-rp-bloc img {
+	margin: auto;
+}
+
+.db-rp-bloc .db_post_thumbnail_container {
+	background: #ffffff;
+}
+.db-rp-bloc .db_post_thumbnail_container img {
+	opacity: 1;
+	-webkit-transition: .3s ease-in-out;
+	transition: .3s ease-in-out;
+}
+.db-rp-bloc .db_post_thumbnail_container:hover img {
+	opacity: .8;
+}
+
+/* Hover.css */
+/* Bounce To Bottom */
+.hvr-bounce-to-bottom {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px transparent;
+  position: relative;
+  -webkit-transition-property: color;
+  transition-property: color;s
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+}
+.hvr-bounce-to-bottom:before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #c3e1e0;
+  -webkit-transform: scaleY(0);
+  transform: scaleY(0);s
+  -webkit-transform-origin: 50% 0;
+  transform-origin: 50% 0;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+  -webkit-transition-duration: 0.5s;
+  transition-duration: 0.5s;
+  -webkit-transition-timing-function: ease-out;
+  transition-timing-function: ease-out;
+}
+.hvr-bounce-to-bottom:hover, .hvr-bounce-to-bottom:focus, .hvr-bounce-to-bottom:active {
+  color: white;
+}
+.hvr-bounce-to-bottom:hover:before, .hvr-bounce-to-bottom:focus:before, .hvr-bounce-to-bottom:active:before {
+  -webkit-transform: scaleY(1);
+  transform: scaleY(1);
+  -webkit-transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+  transition-timing-function: cubic-bezier(0.52, 1.64, 0.37, 0.66);
+}
+
+/* END hover.css */
+
+
+
+/* Anchor offset */
+
+a.anchor {
+	display: block;
+	position: relative;
+	top: -150px;
+	visibility: hidden;
+}
+
+/* END Anchor offset */
+
+/* teaser img postion */
+.tcvpb-teaser img {
+    position: absolute;
+    right: 0;
+    bottom: -15px;
+    z-index: 1602;
+}
+
+/*END teaser img postion */
+
+/* team image size */
+.db-team-member img {
+	height: 165px;
+}

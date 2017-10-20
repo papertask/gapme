@@ -1,0 +1,78 @@
+v1.3.0
++ New - Compatible with Wordpress 4.5.3
++ New - TinyMCE editor custom text color option
++ New - Small TinyMCE editor custom text color option
++ Change - Google Maps api removed from scripts.js file and script is added in enqueue_scripts.php file with wp_enqueue_script function
++ New - option for Google Maps API key inside The Creator settings
++ Change - animations on elements and column
++ New - support for Cyrillic characters
+
+v1.2.0
++ New - Small TinyMCE editor text alignment option
+
+v1.1.2
++ New - Material Icons
++ New - Themify Icons
++ New - Compatible with Wordpress 4.4
+
+v1.1.1
++ New - TinyMCE editor on section title, intro, outro and heading element
++ New - Option for theme to override core elements
+
+v1.1.0
++ New - Elegant Icons
++ Fix - Parallax disabled on the mobile and tablet devices
++ Fix - Error when no category for element defined
++ Fix - indexOf not defined @331 init.js
++ New - Option to set an icon in section header
++ New - Theme can add icon set
++ Change - Left and right margin disabled on sections and columns to preserve grid
++ New - Section and column Right Aligned option
++ New - Section and column Border options
++ New - Background option for column
++ New - Background image size, position and repeat properties on column and section
++ Change - More clear output of section and column code
++ Fix - Value in integer or string with px for box model values possible
++ Fix - Initial content undefined
++ New - DnD content detection and limited parser
+
+v1.0.3
++ New - Green save button on element attribute change 
++ Change - TinyMCE editor paragraph on enter, brake line on shift+enter
++ Fix - Removing of empty paragraphs
++ Change - Inview changed with Waypoints
++ Change - New Add Child button for more consistent look and feel
++ Fix - Multiple add child causes no editor
++ New - Vertical lines section pattern overlay
++ Fix - Multiple Nivo sliders on single page
++ Fix - Error if no saved layouts
++ Fix - Opening two media uploaders at the same time
++ Fix - Scrolling main page content on OSX (Chrome)
++ Fix - Scrolling popup content on back to list
++ Fix - Code cleaned up
++ Fix - tcvpb_options not defined
++ Fix - Several non translatable strings
++ New - Tooltips on icons
++ New - Close button on Layout Manager popup window
++ Fix - Color picker on child clone stays opened
++ Fix - Inline shortcodes inside content now allowed
+
+v1.0.2
++ Update - One more overlay style for sections
++ Fix - Minor CSS styling issues
+
+v1.0.1
++ Fix - Max popups hidth and hight to fit smaller screens
++ Fix - Youtube element URL field
++ Fix - TinyMCE popups proper z-index
++ Fix - Draging element placeholder
++ Fix - Dividers from other tabs shown on first one
++ Fix - Element children order number on delete an sorting
++ Fix - Progress Bar Vertical can be shown countless times on the same page
++ Fix - Post Excerpts showing properly
++ Fix - Nivo Slider is now saving properly
++ Fix - Minor CSS styling issues
++ Update - Image Masonry lightbox grouped by each element
+
+v1.0.0
+Initial release

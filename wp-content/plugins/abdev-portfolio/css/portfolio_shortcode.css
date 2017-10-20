@@ -1,0 +1,17 @@
+.caroufredsel_wrapper{
+	margin: 0 !important;
+}
+
+#ABp_latest_portfolio{
+	padding: 0;
+	list-style: none;
+	display: block;
+}
+
+#ABp_latest_portfolio li{
+	float: left;
+	display: block;
+	margin: 0 15px;
+	padding: 0;
+	width: 262px;
+}
