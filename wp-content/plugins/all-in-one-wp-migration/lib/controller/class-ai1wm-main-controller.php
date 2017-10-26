@@ -136,6 +136,7 @@ class Ai1wm_Main_Controller {
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Enumerate::execute', 100 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Content::execute', 150 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Database::execute', 200 );
+		add_filter( 'ai1wm_export', 'Ai1wm_Export_Database_File::execute', 220 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Download::execute', 250 );
 		add_filter( 'ai1wm_export', 'Ai1wm_Export_Clean::execute', 300 );
 
@@ -144,7 +145,7 @@ class Ai1wm_Main_Controller {
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Compatibility::execute', 10 );
 
 		// Do not resolve URL address
-		if ( ! isset( $_REQUEST['ai1wm_manual_import'] ) && ! isset( $_REQUEST['ai1wm_manual_backups'] ) ) {
+		if ( ! isset( $_REQUEST['ai1wm_manual_import'] ) && ! isset( $_REQUEST['ai1wm_manual_restore'] ) ) {
 			add_filter( 'ai1wm_import', 'Ai1wm_Import_Resolve::execute', 10 );
 		}
 
@@ -153,7 +154,7 @@ class Ai1wm_Main_Controller {
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Blogs::execute', 150 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Enumerate::execute', 200 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Content::execute', 250 );
-		add_filter( 'ai1wm_import', 'Ai1wm_Import_Plugins::execute', 270 );
+		add_filter( 'ai1wm_import', 'Ai1wm_Import_Mu_Plugins::execute', 270 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Database::execute', 300 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Done::execute', 350 );
 		add_filter( 'ai1wm_import', 'Ai1wm_Import_Clean::execute', 400 );
@@ -217,30 +218,57 @@ class Ai1wm_Main_Controller {
 	}
 
 	/**
-	 * Display storage directory notice
+	 * Display notice for storage directory
 	 *
 	 * @return void
 	 */
-	public function storage_notice() {
-		Ai1wm_Template::render( 'main/storage-notice' );
+	public function storage_path_notice() {
+		Ai1wm_Template::render( 'main/storage-path-notice' );
 	}
 
 	/**
-	 * Display index file notice
+	 * Display notice for index file in storage directory
 	 *
 	 * @return void
 	 */
-	public function index_notice() {
-		Ai1wm_Template::render( 'main/index-notice' );
+	public function storage_index_notice() {
+		Ai1wm_Template::render( 'main/storage-index-notice' );
 	}
 
 	/**
-	 * Display backups directory notice
+	 * Display notice for backups directory
 	 *
 	 * @return void
 	 */
-	public function backups_notice() {
-		Ai1wm_Template::render( 'main/backups-notice' );
+	public function backups_path_notice() {
+		Ai1wm_Template::render( 'main/backups-path-notice' );
+	}
+
+	/**
+	 * Display notice for .htaccess file in backups directory
+	 *
+	 * @return void
+	 */
+	public function backups_htaccess_notice() {
+		Ai1wm_Template::render( 'main/backups-htaccess-notice' );
+	}
+
+	/**
+	 * Display notice for web.config file in backups directory
+	 *
+	 * @return void
+	 */
+	public function backups_webconfig_notice() {
+		Ai1wm_Template::render( 'main/backups-webconfig-notice' );
+	}
+
+	/**
+	 * Display notice for index file in backups directory
+	 *
+	 * @return void
+	 */
+	public function backups_index_notice() {
+		Ai1wm_Template::render( 'main/backups-index-notice' );
 	}
 
 	/**
@@ -262,47 +290,71 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function create_folders() {
-		// Check if storage folder exist
+		// Check if storage folder is created
 		if ( ! is_dir( AI1WM_STORAGE_PATH ) ) {
-
-			// Folder doesn't exist, attempt to create it
 			if ( ! mkdir( AI1WM_STORAGE_PATH ) ) {
-
-				// We couldn't create the folder, so let's tell the user
 				if ( is_multisite() ) {
-					return add_action( 'network_admin_notices', array( $this, 'storage_notice' ) );
+					return add_action( 'network_admin_notices', array( $this, 'storage_path_notice' ) );
 				} else {
-					return add_action( 'admin_notices', array( $this, 'storage_notice' ) );
+					return add_action( 'admin_notices', array( $this, 'storage_path_notice' ) );
 				}
 			}
 		}
 
-		// Create index.php in storage folder
-		Ai1wm_File_Index::create( AI1WM_STORAGE_INDEX );
+		// Check if index.php is created in storage folder
+		if ( ! is_file( AI1WM_STORAGE_INDEX ) ) {
+			if ( ! Ai1wm_File_Index::create( AI1WM_STORAGE_INDEX ) ) {
+				if ( is_multisite() ) {
+					return add_action( 'network_admin_notices', array( $this, 'storage_index_notice' ) );
+				} else {
+					return add_action( 'admin_notices', array( $this, 'storage_index_notice' ) );
+				}
+			}
+		}
 
-		// Check if backups folder exist
+		// Check if ai1wm-backups folder is created
 		if ( ! is_dir( AI1WM_BACKUPS_PATH ) ) {
-
-			// Folder doesn't exist, attempt to create it
 			if ( ! mkdir( AI1WM_BACKUPS_PATH ) ) {
-
-				// We couldn't create the folder, so let's tell the user
 				if ( is_multisite() ) {
-					return add_action( 'network_admin_notices', array( $this, 'backups_notice' ) );
+					return add_action( 'network_admin_notices', array( $this, 'backups_path_notice' ) );
 				} else {
-					return add_action( 'admin_notices', array( $this, 'backups_notice' ) );
+					return add_action( 'admin_notices', array( $this, 'backups_path_notice' ) );
 				}
 			}
 		}
 
-		// Create index.php in backups folder
-		Ai1wm_File_Index::create( AI1WM_BACKUPS_INDEX );
+		// Check if .htaccess is created in backups folder
+		if ( ! is_file( AI1WM_BACKUPS_HTACCESS ) ) {
+			if ( ! Ai1wm_File_Htaccess::create( AI1WM_BACKUPS_HTACCESS ) ) {
+				if ( is_multisite() ) {
+					return add_action( 'network_admin_notices', array( $this, 'backups_htaccess_notice' ) );
+				} else {
+					return add_action( 'admin_notices', array( $this, 'backups_htaccess_notice' ) );
+				}
+			}
+		}
 
-		// Create .htaccess in backups folder
-		Ai1wm_File_Htaccess::create( AI1WM_BACKUPS_HTACCESS );
+		// Check if web.config is created in backups folder
+		if ( ! is_file( AI1WM_BACKUPS_WEBCONFIG ) ) {
+			if ( ! Ai1wm_File_Webconfig::create( AI1WM_BACKUPS_WEBCONFIG ) ) {
+				if ( is_multisite() ) {
+					return add_action( 'network_admin_notices', array( $this, 'backups_webconfig_notice' ) );
+				} else {
+					return add_action( 'admin_notices', array( $this, 'backups_webconfig_notice' ) );
+				}
+			}
+		}
 
-		// Create web.config in backups folder
-		Ai1wm_File_Webconfig::create( AI1WM_BACKUPS_WEBCONFIG );
+		// Check if index.php is created in backups folder
+		if ( ! is_file( AI1WM_BACKUPS_INDEX ) ) {
+			if ( ! Ai1wm_File_Index::create( AI1WM_BACKUPS_INDEX ) ) {
+				if ( is_multisite() ) {
+					return add_action( 'network_admin_notices', array( $this, 'backups_index_notice' ) );
+				} else {
+					return add_action( 'admin_notices', array( $this, 'backups_index_notice' ) );
+				}
+			}
+		}
 	}
 
 	/**
@@ -359,7 +411,7 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function register_export_scripts_and_styles( $hook ) {
-		if ( 'toplevel_page_site-migration-export' !== $hook ) {
+		if ( stripos( 'toplevel_page_site-migration-export', $hook ) === false ) {
 			return;
 		}
 
@@ -384,18 +436,20 @@ class Ai1wm_Main_Controller {
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_feedback' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-export', 'ai1wm_report', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_report' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-export', 'ai1wm_export', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_export' ) ),
 			),
 			'status' => array(
-				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_status' ) ),
+				'url' => wp_make_link_relative( add_query_arg( array( 'secret_key' => get_option( AI1WM_SECRET_KEY ) ), admin_url( 'admin-ajax.php?action=ai1wm_status' ) ) ),
 			),
 			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
@@ -407,7 +461,7 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function register_import_scripts_and_styles( $hook ) {
-		if ( 'all-in-one-wp-migration_page_site-migration-import' !== $hook ) {
+		if ( stripos( 'all-in-one-wp-migration_page_site-migration-import', $hook ) === false ) {
 			return;
 		}
 
@@ -445,18 +499,20 @@ class Ai1wm_Main_Controller {
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_feedback' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-import', 'ai1wm_report', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_report' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-import', 'ai1wm_import', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_import' ) ),
 			),
 			'status' => array(
-				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_status' ) ),
+				'url' => wp_make_link_relative( add_query_arg( array( 'secret_key' => get_option( AI1WM_SECRET_KEY ) ), admin_url( 'admin-ajax.php?action=ai1wm_status' ) ) ),
 			),
 			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 			'oversize'   => sprintf(
@@ -490,7 +546,7 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function register_backups_scripts_and_styles( $hook ) {
-		if ( 'all-in-one-wp-migration_page_site-migration-backups' !== $hook ) {
+		if ( stripos( 'all-in-one-wp-migration_page_site-migration-backups', $hook ) === false ) {
 			return;
 		}
 
@@ -515,23 +571,26 @@ class Ai1wm_Main_Controller {
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_feedback' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-backups', 'ai1wm_report', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_report' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-backups', 'ai1wm_backups', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_backups' ) ),
 			),
+			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
 		wp_localize_script( 'ai1wm-js-backups', 'ai1wm_import', array(
 			'ajax' => array(
 				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_import' ) ),
 			),
 			'status' => array(
-				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_status' ) ),
+				'url' => wp_make_link_relative( add_query_arg( array( 'secret_key' => get_option( AI1WM_SECRET_KEY ) ), admin_url( 'admin-ajax.php?action=ai1wm_status' ) ) ),
 			),
 			'secret_key' => get_option( AI1WM_SECRET_KEY ),
 		) );
@@ -543,7 +602,7 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function register_updater_scripts_and_styles( $hook ) {
-		if ( 'plugins.php' !== $hook ) {
+		if ( 'plugins.php' !== strtolower( $hook ) ) {
 			return;
 		}
 
@@ -560,7 +619,7 @@ class Ai1wm_Main_Controller {
 		);
 		wp_localize_script( 'ai1wm-js-updater', 'ai1wm_updater', array(
 			'ajax' => array(
-				'url' => admin_url( 'admin-ajax.php?action=ai1wm_updater' ),
+				'url' => wp_make_link_relative( admin_url( 'admin-ajax.php?action=ai1wm_updater' ) ),
 			),
 		) );
 	}
@@ -591,7 +650,7 @@ class Ai1wm_Main_Controller {
 		// Set username
 		if ( isset( $_SERVER['PHP_AUTH_USER'] ) ) {
 			update_option( AI1WM_AUTH_USER, $_SERVER['PHP_AUTH_USER'] );
-		} else if ( isset( $_SERVER['REMOTE_USER'] ) ) {
+		} elseif ( isset( $_SERVER['REMOTE_USER'] ) ) {
 			update_option( AI1WM_AUTH_USER, $_SERVER['REMOTE_USER'] );
 		}
 
@@ -614,34 +673,27 @@ class Ai1wm_Main_Controller {
 	 * @return void
 	 */
 	public function router() {
-		// Public
+		// Public actions
 		add_action( 'wp_ajax_nopriv_ai1wm_export', 'Ai1wm_Export_Controller::export' );
 		add_action( 'wp_ajax_nopriv_ai1wm_import', 'Ai1wm_Import_Controller::import' );
 		add_action( 'wp_ajax_nopriv_ai1wm_status', 'Ai1wm_Status_Controller::status' );
 		add_action( 'wp_ajax_nopriv_ai1wm_resolve', 'Ai1wm_Resolve_Controller::resolve' );
+		add_action( 'wp_ajax_nopriv_ai1wm_backups', 'Ai1wm_Backups_Controller::delete' );
+		add_action( 'wp_ajax_nopriv_ai1wm_feedback', 'Ai1wm_Feedback_Controller::feedback' );
+		add_action( 'wp_ajax_nopriv_ai1wm_report', 'Ai1wm_Report_Controller::report' );
+
+		// Private actions
+		add_action( 'wp_ajax_ai1wm_export', 'Ai1wm_Export_Controller::export' );
+		add_action( 'wp_ajax_ai1wm_import', 'Ai1wm_Import_Controller::import' );
+		add_action( 'wp_ajax_ai1wm_status', 'Ai1wm_Status_Controller::status' );
+		add_action( 'wp_ajax_ai1wm_resolve', 'Ai1wm_Resolve_Controller::resolve' );
+		add_action( 'wp_ajax_ai1wm_backups', 'Ai1wm_Backups_Controller::delete' );
+		add_action( 'wp_ajax_ai1wm_feedback', 'Ai1wm_Feedback_Controller::feedback' );
+		add_action( 'wp_ajax_ai1wm_report', 'Ai1wm_Report_Controller::report' );
 
 		// Update
 		if ( current_user_can( 'update_plugins' ) ) {
 			add_action( 'wp_ajax_ai1wm_updater', 'Ai1wm_Updater_Controller::updater' );
-		}
-
-		// Export
-		if ( current_user_can( 'export' ) ) {
-			add_action( 'wp_ajax_ai1wm_export', 'Ai1wm_Export_Controller::export' );
-		}
-
-		// Import
-		if ( current_user_can( 'import' ) ) {
-			add_action( 'wp_ajax_ai1wm_import', 'Ai1wm_Import_Controller::import' );
-		}
-
-		// Both
-		if ( current_user_can( 'export' ) || current_user_can( 'import' ) ) {
-			add_action( 'wp_ajax_ai1wm_backups', 'Ai1wm_Backups_Controller::delete' );
-			add_action( 'wp_ajax_ai1wm_feedback', 'Ai1wm_Feedback_Controller::feedback' );
-			add_action( 'wp_ajax_ai1wm_report', 'Ai1wm_Report_Controller::report' );
-			add_action( 'wp_ajax_ai1wm_status', 'Ai1wm_Status_Controller::status' );
-			add_action( 'wp_ajax_ai1wm_resolve', 'Ai1wm_Resolve_Controller::resolve' );
 		}
 	}
 

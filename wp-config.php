@@ -23,10 +23,10 @@
 define('DB_NAME', 'globalpme');
 
 /** MySQL database username */
-define('DB_USER', 'globalpme');
+define('DB_USER', 'root');
 
 /** MySQL database password */
-define('DB_PASSWORD', 'Globalpme2017!');
+define('DB_PASSWORD', 'Liuyuhan2016!@#');
 
 /** MySQL hostname */
 define('DB_HOST', 'localhost');

@@ -32,7 +32,7 @@ class Tribe__Events__Integrations__Manager {
 	 * @return bool
 	 */
 	private function load_wpml_integration() {
-		if ( ! ( class_exists( 'SitePress' ) && defined( 'ICL_PLUGIN_PATH' ) ) ) {
+		if ( ! tribe_is_wpml_active() ) {
 			return false;
 		}
 
@@ -50,6 +50,7 @@ class Tribe__Events__Integrations__Manager {
 	public function load_integrations() {
 		$this->load_wpml_integration();
 		$this->load_X_theme_integration();
+		$this->load_twenty_seventeen_integration();
 	}
 
 	private function load_X_theme_integration() {
@@ -62,5 +63,23 @@ class Tribe__Events__Integrations__Manager {
 		Tribe__Events__Integrations__X_Theme__X_Theme::instance()->hook();
 
 		return true;
+	}
+
+	/**
+	 * Loads our Twenty Seventeen integrations if that theme is active.
+	 *
+	 * @since 4.5.10
+	 *
+	 * @return bool
+	 */
+	protected function load_twenty_seventeen_integration() {
+		$theme = get_stylesheet();
+
+		if ( 'twentyseventeen' === $theme ) {
+			tribe( 'tec.integrations.twenty-seventeen' );
+			return true;
+		}
+
+		return false;
 	}
 }
