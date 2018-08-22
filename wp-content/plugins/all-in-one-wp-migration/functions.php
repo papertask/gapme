@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2018 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -566,6 +566,13 @@ function ai1wm_plugin_filters( $filters = array() ) {
 		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-box-extension';
 	}
 
+	// Mega Extension
+	if ( defined( 'AI1WMEE_PLUGIN_BASENAME' ) ) {
+		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . dirname( AI1WMEE_PLUGIN_BASENAME );
+	} else {
+		$filters[] = 'plugins' . DIRECTORY_SEPARATOR . 'all-in-one-wp-migration-mega-extension';
+	}
+
 	return $filters;
 }
 
@@ -623,6 +630,11 @@ function ai1wm_active_servmask_plugins( $plugins = array() ) {
 	// Box Extension
 	if ( defined( 'AI1WMBE_PLUGIN_BASENAME' ) ) {
 		$plugins[] = AI1WMBE_PLUGIN_BASENAME;
+	}
+
+	// Mega Extension
+	if ( defined( 'AI1WMEE_PLUGIN_BASENAME' ) ) {
+		$plugins[] = AI1WMEE_PLUGIN_BASENAME;
 	}
 
 	return $plugins;
@@ -763,6 +775,27 @@ function ai1wm_deactivate_plugins( $plugins ) {
 	sort( $current );
 
 	return update_option( AI1WM_ACTIVE_PLUGINS, $current );
+}
+
+/**
+ * Deactivate Jetpack modules
+ *
+ * @param  array   $modules List of modules
+ * @return boolean
+ */
+function ai1wm_deactivate_jetpack_modules( $modules ) {
+	$current = get_option( AI1WM_JETPACK_ACTIVE_MODULES, array() );
+
+	// Remove modules
+	foreach ( $modules as $module ) {
+		if ( ( $key = array_search( $module, $current ) ) !== false ) {
+			unset( $current[ $key ] );
+		}
+	}
+
+	sort( $current );
+
+	return update_option( AI1WM_JETPACK_ACTIVE_MODULES, $current );
 }
 
 /**
@@ -948,7 +981,7 @@ function ai1wm_chmod( $file, $mode ) {
  * @param  string $destination_file File to copy the contents to
  */
 function ai1wm_copy( $source_file, $destination_file ) {
-	$source_handle = ai1wm_open( $source_file, 'rb' );
+	$source_handle      = ai1wm_open( $source_file, 'rb' );
 	$destination_handle = ai1wm_open( $destination_file, 'ab' );
 	while ( $buffer = ai1wm_read( $source_handle, 4096 ) ) {
 		ai1wm_write( $destination_handle, $buffer );
@@ -1043,17 +1076,6 @@ function ai1wm_fseek( $file_handle, Math_BigInteger $offset ) {
 		$bytes      = ai1wm_read( $file_handle, $chunk_size->toInteger() );
 		$offset     = $offset->subtract( new Math_BigInteger( strlen( $bytes ) ) );
 		$chunk_size = ai1wm_find_smaller_number( $chunk_size, $offset );
-	}
-}
-
-/**
- * Deactivate Jetpack Photon module
- *
- * @return mixed
- */
-function ai1wm_deactivate_jetpack_photon_module() {
-	if ( ( $jetpack = get_option( AI1WM_JETPACK_ACTIVE_MODULES, array() ) ) ) {
-		return update_option( AI1WM_JETPACK_ACTIVE_MODULES, array_values( array_diff( $jetpack, array( 'photon' ) ) ) );
 	}
 }
 

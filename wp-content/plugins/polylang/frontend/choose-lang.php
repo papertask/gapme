@@ -32,7 +32,7 @@ abstract class PLL_Choose_Lang {
 	 * @since 1.8
 	 */
 	public function init() {
-		if ( PLL_AJAX_ON_FRONT || false === stripos( $_SERVER['SCRIPT_FILENAME'], 'index.php' ) ) {
+		if ( Polylang::is_ajax_on_front() || false === stripos( $_SERVER['SCRIPT_FILENAME'], 'index.php' ) ) {
 			$this->set_language( empty( $_REQUEST['lang'] ) ? $this->get_preferred_language() : $this->model->get_language( $_REQUEST['lang'] ) );
 		}
 
@@ -147,7 +147,7 @@ abstract class PLL_Choose_Lang {
 						}
 					}
 				}
-				$accept_langs = array_combine( $k,$v );
+				$accept_langs = array_combine( $k, $v );
 			}
 		}
 
@@ -211,7 +211,7 @@ abstract class PLL_Choose_Lang {
 	}
 
 	/**
-	 * sets the language when home page is resquested
+	 * sets the language when home page is requested
 	 *
 	 * @since 1.2
 	 */
@@ -271,7 +271,7 @@ abstract class PLL_Choose_Lang {
 	 *
 	 * @since 0.8.4
 	 *
-	 * @param int $post_id the post beeing commented
+	 * @param int $post_id the post being commented
 	 */
 	public function pre_comment_on_post( $post_id ) {
 		$this->set_language( $this->model->post->get_language( $post_id ) );
@@ -306,7 +306,7 @@ abstract class PLL_Choose_Lang {
 		// sets is_home on translated home page when it displays posts
 		// is_home must be true on page 2, 3... too
 		// as well as when searching an empty string: http://wordpress.org/support/topic/plugin-polylang-polylang-breaks-search-in-spun-theme
-		if ( 'posts' == get_option( 'show_on_front' ) && ( count( $query->query ) == 1 || ( is_paged() && count( $query->query ) == 2 ) || ( isset( $query->query['s'] ) && ! $query->query['s'] ) ) && $lang = get_query_var( 'lang' ) ) {
+		elseif ( ( count( $query->query ) == 1 || ( is_paged() && count( $query->query ) == 2 ) || ( isset( $query->query['s'] ) && ! $query->query['s'] ) ) && $lang = get_query_var( 'lang' ) ) {
 			$lang = $this->model->get_language( $lang );
 			$this->set_language( $lang ); // sets the language now otherwise it will be too late to filter sticky posts !
 			$query->is_home = true;

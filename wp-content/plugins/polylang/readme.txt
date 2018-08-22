@@ -3,8 +3,8 @@ Contributors: Chouby
 Donate link: https://polylang.pro
 Tags: multilingual, bilingual, translate, translation, language, multilanguage, international, localization
 Requires at least: 4.4
-Tested up to: 4.8
-Stable tag: 2.2.3
+Tested up to: 4.9
+Stable tag: 2.3.4
 License: GPLv2 or later
 
 Making WordPress multilingual
@@ -41,7 +41,7 @@ Don't hesitate to [give your feedback](http://wordpress.org/support/view/plugin-
 
 == Installation ==
 
-1. Make sure you are using WordPress 4.0 or later and that your server is running PHP 5.2.4 or later (same requirement as WordPress itself)
+1. Make sure you are using WordPress 4.4 or later and that your server is running PHP 5.2.4 or later (same requirement as WordPress itself)
 1. If you tried other multilingual plugins, deactivate them before activating Polylang, otherwise, you may get unexpected results!
 1. Install and activate the plugin as usual from the 'Plugins' menu in WordPress.
 1. Go to the languages settings page and create the languages you need
@@ -76,62 +76,66 @@ Don't hesitate to [give your feedback](http://wordpress.org/support/view/plugin-
 
 == Changelog ==
 
-= 2.2.3 (2017-09-24) =
+= 2.3.4 (2018-03-27) =
 
-* Fix editor removed on pages (introduced in 2.2.2)
+* Pro: Fix conflict with Pods related to translated slugs for custom post types
+* Add Friulian to the predefined languages list
+* Fix conflict (javascript error) with Gütenberg #225
+* Fix conflict on ajax requests introduced by WooCoommerce 3.3.4
+* Fix queries by 'category_name' not auto translated #238
 
-= 2.2.2 (2017-09-22) =
+= 2.3.3 (2018-03-15) =
 
-* Pro: Fix Duplicate post button not working when the user meta has been corrupted
-* Fix PHP notice with the plugin Members #175
-* Fix page template select displayed when editing a translated page for posts
-* Fix incompatibility with WP 4.8.2 (placeholder %1$s in prepare)
+* Pro: Fix tax query using a term sharing slugs (fix a conflict with Fusion Builder)
+* Restore Polylang (free) on REST requests, while disabling the language filter as in v2.3
+* Rework auto translated query with taxonomy in different language #223
+* Synchronize Yoast SEO primary category (needs Yoast SEO 7.0+)
+* Fix PHP warning introduced by Yoast SEO 7.0 #229
+* Fix tax query when using the relation 'OR'
+* Fix a conflict with the combination of Barrel + WP Bakery Page Builder
+* Fix broken redirect with MU domain mapping #226
+* Fix site title not translated in password change email
 
-= 2.2.1 (2017-08-30) =
+= 2.3.2 (2018-03-05) =
 
-* Pro: partially refactor REST API classes
-* Pro: Fix duplicate content user meta not removed from DB when uninstalling the plugin
-* Fix strings translations not removed from DB when uninstalling the plugin
-* Fix incorrect translation files loaded in ajax on front when the user is logged in (WP 4.7+)
-* Fix widget language dropdown removed when saving a widget (introduced in 2.2)
-* Fix queries with negative values for the 'cat' parameter (introduced in 2.2 for queries made on frontend)
-* Fix performance issue in combination with some plugins when the language is set from the content (introduced in 2.2)
+* Pro: Fix REST requests not filtered by the requested language (introduced in 2.3).
+* Pro: Fix error 404 on single posts if posts are untranslatable
+* Deactivate Polylang (free) on REST requests by default.
+* Fix translated terms unassigned from posts when deleting a term
+* Fix auto translated query with taxonomy in different language returning empty results since WP 4.9 #223
+* Fix conflict with a homepage option of the theme Extra
+* Fix warning when filtering get_pages()
 
-= 2.2 (2017-08-16) =
+= 2.3.1 (2018-02-15) =
 
-* Pro: Add support for the REST API
-* Pro: Add integration with The Events Calendar
-* Pro: Refactor ACF Pro integration for post metas and integrate term metas
-* Pro: Ask confirmation if synchronizing a post overwrites an existing translation
-* Pro: Separate sync post logic from interface
-* Pro: Fix 'Detect browser language' option automatically deactivated
-* Pro: Fix redirect to 404 when the 'page' slug translation includes non alphanumeric characters.
-* Pro: Fix untranslated post type archive slug
-* Pro: Fix ACF taxonomy fields not copied when the taxonomy is not translated #156
-* Pro: Fix fatal error with ACF4
-* Support a different content text direction in admin #45
-* Add support for wildcards and 'copy-once' attribute in wpml-config.xml
-* Add minimal support for the filters 'wpml_display_language_names' and 'icl_ls_languages'
-* Improve compatibility with the plugin WordPress MU Domain Mapping #116
-* Improve speed of the sticky posts filter #41
-* Remove redirect_lang option for multiple domains and subdomains
-* Use secure cookie when using SSL
-* Allow to copy/sync term metas with the filter 'pll_copy_term_metas'
-* Filter ajax requests in term.php according to the term language
-* Add error message in customizer when setting an untranslated static front page #47
-* Load static page class only if we are using a static front page
-* Refactor parse_query filters to use the same code on frontend and admin
-* Don't use add_language_to_link in filters
-* Move ajaxPrefilter footer script on top
-* Use wp_doing_ajax() instead of DOING_AJAX constant
-* Fix queries custom tax not excluded from language filter on admin
-* Fix WP translation not loaded when the language is set from the content on multisite.
-* Fix the list of core post types in PLL_OLT_Manager for WP 4.7+
-* Fix post name and tag slug incorrectly sanitized for German and Danish
-* Fix lang attribute in dropdowns
-* Fix wpml_permalink filter #139
-* Fix WPML constants undefined on backend #151
-* Fix a conflict with the plugin Custom Permalinks #143
-* Fix menu location unexpectedly unset
+* Pro: Fix GET REST request with slug parameter deleting the post slug
+* Fix http request with a custom query var being redirected to the home page #216
+
+= 2.3 (2018-01-30) =
+
+* Pro: Duplicating a post now duplicates untranslated terms and the featured image (if media are translatable)
+* Pro: Add filter 'pll_sync_post_fields'
+* Pro: Translate ACF Pro clone fields when creating a new field group translation
+* Pro: Allow to share slugs when creating a post or term with the REST API
+* Pro: Load asynchronously the script added on front for multiple domains and subdomains
+* Pro: Fix 'lang' parameter not interpreted when the query includes 'name'
+* Refactor the synchronization of metas for better synchronization and performance improvement
+* Refactor the synchronization of taxonomy terms for performance improvement
+* Refactor language and translations saving for performance improvement
+* Refactor the synchronization of sticky posts
+* Remove all languages files. All translations are now maintained on https://translate.wordpress.org/projects/wp-plugins/polylang #199
+* Refactor the list of languages to merge predefined languages, Facebook locales and fixes for W3C locales
+* Automatically deactivate Polylang when activating Polylang Pro
+* Disable programmatically translated post types and taxonomies in settings. Props Ulrich Pogson. #180
+* Set the cookie language in Javascript when a cache plugin is active
+* Automatically remove the home page from cache when requesting the detection of the browser preferred language
+* Use relative urls for the admin language filter in admin bar. #209
+* Disable auto translation of WP_Term_Query if it has a 'lang' parameter
+* Don't filter REST requests by default. #211
+* Fix Yoast SEO statistics in dashboard showing only the default language. #211
+* Fix WP Rocket clearing the cache of the wrong adjacent post
+* Fix random header image
+* Fix home page not correctly loaded when adding a query var
+* Fix: Impossible to change the language code when the language code is also a WordPress locale.
 
 See [changelog.txt](https://plugins.svn.wordpress.org/polylang/trunk/changelog.txt) for older changelog

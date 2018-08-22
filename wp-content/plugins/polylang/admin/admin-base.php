@@ -30,7 +30,7 @@ class PLL_Admin_Base extends PLL_Base {
 		add_action( 'admin_print_footer_scripts', array( $this, 'admin_print_footer_scripts' ), 0 ); // High priority in case an ajax request is sent by an immediately invoked function
 
 		// Lingotek
-		if ( ! defined( 'PLL_LINGOTEK_AD' ) || PLL_LINGOTEK_AD ) {
+		if ( ! defined( 'POLYLANG_PRO' ) && ( ! defined( 'PLL_LINGOTEK_AD' ) || PLL_LINGOTEK_AD ) ) {
 			require_once POLYLANG_DIR . '/lingotek/lingotek.php';
 		}
 	}
@@ -66,7 +66,7 @@ class PLL_Admin_Base extends PLL_Base {
 	 */
 	public function add_menus() {
 		// Prepare the list of tabs
-		$tabs = array( 'lang' => __( 'Languages','polylang' ) );
+		$tabs = array( 'lang' => __( 'Languages', 'polylang' ) );
 
 		// Only if at least one language has been created
 		if ( $this->model->get_languages_list() ) {
@@ -88,10 +88,10 @@ class PLL_Admin_Base extends PLL_Base {
 			$page = 'lang' === $tab ? 'mlang' : "mlang_$tab";
 			if ( empty( $parent ) ) {
 				$parent = $page;
-				add_menu_page( $title, __( 'Languages','polylang' ), 'manage_options', $page, null , 'dashicons-translation' );
+				add_menu_page( $title, __( 'Languages', 'polylang' ), 'manage_options', $page, null, 'dashicons-translation' );
 			}
 
-			add_submenu_page( $parent, $title, $title, 'manage_options', $page , array( $this, 'languages_page' ) );
+			add_submenu_page( $parent, $title, $title, 'manage_options', $page, array( $this, 'languages_page' ) );
 		}
 	}
 
@@ -115,7 +115,7 @@ class PLL_Admin_Base extends PLL_Base {
 		// 3 => 1 if loaded in footer
 		// FIXME: check if I can load more scripts in footer
 		$scripts = array(
-			'post'  => array( array( 'post', 'media', 'async-upload', 'edit' ), array( 'jquery', 'wp-ajax-response', 'post', 'jquery-ui-autocomplete' ), 0, 1 ),
+			'post'  => array( array( 'post', 'media', 'async-upload', 'edit' ), array( 'jquery', 'wp-ajax-response', 'post', 'jquery-ui-autocomplete' ), 0, 0 ),
 			'media' => array( array( 'upload' ), array( 'jquery' ), 0, 1 ),
 			'term'  => array( array( 'edit-tags', 'term' ), array( 'jquery', 'wp-ajax-response', 'jquery-ui-autocomplete' ), 0, 1 ),
 			'user'  => array( array( 'profile', 'user-edit' ), array( 'jquery' ), 0, 0 ),
@@ -262,7 +262,7 @@ class PLL_Admin_Base extends PLL_Base {
 		$this->pref_lang = empty( $this->filter_lang ) ? $this->model->get_language( $this->options['default_lang'] ) : $this->filter_lang;
 
 		/**
-		 * Filter the preferred language on amin side
+		 * Filter the preferred language on admin side
 		 * The preferred language is used for example to determine the language of a new post
 		 *
 		 * @since 1.2.3
@@ -286,7 +286,7 @@ class PLL_Admin_Base extends PLL_Base {
 			do_action( 'pll_language_defined', $curlang->slug, $curlang );
 		} else {
 			/** This action is documented in include/class-polylang.php */
-			do_action( 'pll_no_language_defined' ); // to load overriden textdomains
+			do_action( 'pll_no_language_defined' ); // to load overridden textdomains
 		}
 	}
 
@@ -329,8 +329,6 @@ class PLL_Admin_Base extends PLL_Base {
 	 * @param object $wp_admin_bar
 	 */
 	public function admin_bar_menu( $wp_admin_bar ) {
-		$url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
 		$all_item = (object) array(
 			'slug' => 'all',
 			'name' => __( 'Show all languages', 'polylang' ),
@@ -349,7 +347,7 @@ class PLL_Admin_Base extends PLL_Base {
 		$wp_admin_bar->add_menu( array(
 			'id'     => 'languages',
 			'title'  => $selected->flag . $title,
-			'href'   => esc_url( add_query_arg( 'lang', $selected->slug, remove_query_arg( 'paged', $url ) ) ),
+			'href'   => esc_url( add_query_arg( 'lang', $selected->slug, remove_query_arg( 'paged' ) ) ),
 			'meta'   => array( 'title' => __( 'Filters content by language', 'polylang' ) ),
 		) );
 
@@ -362,7 +360,7 @@ class PLL_Admin_Base extends PLL_Base {
 				'parent' => 'languages',
 				'id'     => $lang->slug,
 				'title'  => $lang->flag . esc_html( $lang->name ),
-				'href'   => esc_url( add_query_arg( 'lang', $lang->slug, remove_query_arg( 'paged', $url ) ) ),
+				'href'   => esc_url( add_query_arg( 'lang', $lang->slug, remove_query_arg( 'paged' ) ) ),
 				'meta'   => 'all' === $lang->slug ? array() : array( 'lang' => esc_attr( $lang->get_locale( 'display' ) ) ),
 			) );
 		}

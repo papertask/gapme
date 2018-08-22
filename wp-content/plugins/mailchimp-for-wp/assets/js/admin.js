@@ -1,4 +1,4 @@
-(function () { var require = undefined; var define = undefined; (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+(function () { var require = undefined; var define = undefined; (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 'use strict';
 
 // dependencies
@@ -743,10 +743,10 @@ var _8 = function($window, Promise) {
 				_abort.call(xhr)
 			}
 			xhr.open(args.method, args.url, typeof args.async === "boolean" ? args.async : true, typeof args.user === "string" ? args.user : undefined, typeof args.password === "string" ? args.password : undefined)
-			if (args.serialize === JSON.stringify && useBody) {
+			if (args.serialize === JSON.stringify && useBody && !(args.headers && args.headers.hasOwnProperty("Content-Type"))) {
 				xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8")
 			}
-			if (args.deserialize === deserialize) {
+			if (args.deserialize === deserialize && !(args.headers && args.headers.hasOwnProperty("Accept"))) {
 				xhr.setRequestHeader("Accept", "application/json, text/*")
 			}
 			if (args.withCredentials) xhr.withCredentials = args.withCredentials
@@ -1438,7 +1438,8 @@ var coreRenderer = function($window) {
 		updateNodes(dom, dom.vnodes, Vnode.normalizeChildren(vnodes), false, hooks, null, namespace === "http://www.w3.org/1999/xhtml" ? undefined : namespace)
 		dom.vnodes = vnodes
 		for (var i = 0; i < hooks.length; i++) hooks[i]()
-		if ($doc.activeElement !== active) active.focus()
+		// document.activeElement can return null in IE https://developer.mozilla.org/en-US/docs/Web/API/Document/activeElement
+		if (active != null && $doc.activeElement !== active) active.focus()
 	}
 	return {render: render, setEventCallback: setEventCallback}
 }
@@ -1704,7 +1705,7 @@ m.request = requestService.request
 m.jsonp = requestService.jsonp
 m.parseQueryString = parseQueryString
 m.buildQueryString = buildQueryString
-m.version = "1.1.3"
+m.version = "1.1.5"
 m.vnode = Vnode
 if (typeof module !== "undefined") module["exports"] = m
 else window.m = m
@@ -1712,7 +1713,7 @@ else window.m = m
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{}],8:[function(require,module,exports){
 /*!
- * EventEmitter v5.2.2 - git.io/ee
+ * EventEmitter v5.2.4 - git.io/ee
  * Unlicense - http://unlicense.org/
  * Oliver Caldwell - http://oli.me.uk/
  * @preserve

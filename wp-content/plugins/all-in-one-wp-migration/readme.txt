@@ -2,8 +2,8 @@
 Contributors: yani.iliev, bangelov, pimjitsawang
 Tags: move, transfer, copy, migrate, backup, clone, restore, db migration, wordpress migration, website migration, database export, database import, apoyo, sauvegarde, di riserva, バックアップ
 Requires at least: 3.3
-Tested up to: 4.8
-Stable tag: 6.59
+Tested up to: 4.9
+Stable tag: 6.65
 License: GPLv2 or later
 
 Move, transfer, copy, migrate, and backup a site with 1-click. Quick, easy, and reliable.
@@ -52,6 +52,7 @@ Mobile device compatible: All in One WP Plugin is the first plugin to offer true
 * [URL](https://servmask.com/products/url-extension)
 * [OneDrive](https://servmask.com/products/onedrive-extension)
 * [Box](https://servmask.com/products/box-extension)
+* [Mega](https://servmask.com/products/mega-extension)
 
 = Supported hosting providers =
 **The plugin does not have any dependancies, making it compatible with all PHP hosting providers. We support a vast range of hosting providers. Some of the most popular include:**
@@ -93,6 +94,61 @@ Alternatively you can download the plugin using the download button on this page
 3. Plugin Menu
 
 == Changelog ==
+= 6.65 =
+**Added**
+
+* New plugin icons on WP Admin Updates page
+
+**Fixed**
+
+* Table prefix replacement of subsite options table on export
+
+= 6.64 =
+**Added**
+
+* Deactivate Jetpack SSO module on import
+* Deactivate Invisible reCaptcha plugin on import
+
+= 6.63 =
+**Added**
+
+* Responsive design on export/import dropdown
+* Warning message when export site is using PHP 5.x and import site is using PHP 7.x
+
+**Fixed**
+
+* Wrong next backup date on Settings page
+* 🇯🇵 Japanese translation on Backups page
+
+**Changed**
+
+* Remove disabled cancel button on import
+
+= 6.62 =
+**Added**
+
+* Technical message if PHP is 32bit and backup is larger than 2GB on export
+* Technical message if db server is SQL Server on export/import
+
+**Fixed**
+
+* SQL regex pattern on import
+
+**Changed**
+
+* Confirmation message on import
+
+= 6.61 =
+**Added**
+
+* Disable wp-force-ssl plugin if current site is not SSL based on import
+* Support for Mega Extension
+
+= 6.60 =
+**Added**
+
+* Tested up to WordPress 4.9
+
 = 6.59 =
 **Added**
 
